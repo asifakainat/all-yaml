@@ -1,0 +1,27 @@
+---
+- name: lvm-playbook
+  hosts: all
+  tasks:
+    - name: vgcreate
+      lvg:
+        vg: vgproject
+        pvs: /dev/sdb
+    - name: lvcreate
+      lvol:
+        vg: vgproject
+        lv: lvproject
+        size: 1G
+    - name: creatingg file system
+      filesystem:
+        fstype: xfs
+        dev: /dev/vgproject/lvproject
+    - name: making dir
+      file:
+        path: /project
+        state: directory
+    - name: mounting dir
+      mount:
+        path: /project
+        src: /dev/vgproject/lvproject
+        fstype: xfs
+        state: mounted    
