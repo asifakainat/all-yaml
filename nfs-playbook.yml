@@ -1,0 +1,57 @@
+---
+- name: nfs playbook
+  hosts: all
+  tasks:
+    - name: installing pkg
+      yum:
+        name: nfs-utils
+        state: latest
+    - name: enabling service
+      service:
+        name: nfs
+        state: started
+        enabled: yes
+    - name: adding ports
+      firewalld:
+        port: 2049/tcp 
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: ports
+      firewalld:
+        port: 2049/udp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: ports
+      firewalld:
+        port: 111/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: ports
+      firewalld:
+        port: 111/udp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: ports
+      firewalld:
+        port: 20048/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: ports
+      firewalld:
+        port: 20048/udp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding line in file
+      lineinfile:
+        path: /etc/exports
+        line: "/project 192.168.10.102(rw,sync,no_root_squash)"
+    - name: exporting
+      shell:
+        cmd: 'exportfs -avr'
+
